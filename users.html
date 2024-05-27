@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Library Management System - Users</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e0e0e0; 
+        background-image: url(library.jpg);
+    }
+    header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+    nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+    }
+    table {
+        border-collapse: collapse;
+        width: 50%;
+        margin: 20px auto;
+        background-color: #fff; 
+        border-radius: 10px;
+    }
+    th, td {
+        border: 1px solid #ddd; 
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #4CAF50; 
+        color: white;
+    }
+    form {
+        margin-bottom: 10px;
+        background-color: rgba(255, 255, 255, 0.7); 
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        margin: 20px auto;
+    }
+</style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="registration.html">Register</a>
+        <a href="login.html">Login</a>
+        <a href="users.html">Users</a>
+        <a href="#" id="logoutLink">Logout</a>
+    </nav>
+</header>
+
+<h1>Library Management System - Users</h1>
+
+<form id="userForm">
+    <label for="userName">User Name:</label>
+    <input type="text" id="userName" required><br>
+    <label for="userRole">Role:</label>
+    <select id="userRole" required>
+        <option value="student">Student</option>
+        <option value="admin">Admin</option>
+    </select><br>
+    <button type="submit">Add User</button>
+</form>
+
+<table id="userTable">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="userList"></tbody>
+</table>
+
+<script>
+    let users = [];
+
+    function addUser(event) {
+        event.preventDefault();
+        const userName = document.getElementById('userName').value;
+        const userRole = document.getElementById('userRole').value;
+
+        const existingUser = users.find(user => user.name === userName);
+        if (existingUser) {
+            alert("User already exists.");
+        } else {
+            users.push({ name: userName, role: userRole });
+        }
+
+        displayUsers();
+        document.getElementById('userForm').reset();
+    }
+
+    function deleteUser(userName) {
+        users = users.filter(user => user.name !== userName);
+        displayUsers();
+    }
+
+    function displayUsers() {
+        const userList = document.getElementById('userList');
+        userList.innerHTML = '';
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.name}</td>
+                <td>${user.role}</td>
+                <td>
+                    <button onclick="deleteUser('${user.name}')">Delete</button>
+                </td>
+            `;
+            userList.appendChild(row);
+        });
+    }
+
+    document.getElementById('userForm').addEventListener('submit', addUser);
+    displayUsers();
+
+    
+    document.getElementById('logoutLink').addEventListener('click', function() {
+        localStorage.removeItem('loggedIn');
+        window.location.href = 'login.html';
+    });
+
+    
+    if (!localStorage.getItem('loggedIn')) {
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>

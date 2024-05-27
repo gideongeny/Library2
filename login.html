@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Library Management System - Login</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #e0e0e0;
+        background-image: url(library.jpg);
+    }
+    header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+    nav a {
+        color: white;
+        margin: 0 15px;
+        text-decoration: none;
+    }
+    .login-form {
+        background-color: #a0d2eb;
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        margin: 20px auto;
+    }
+    .login-form label {
+        color: #ffffff;
+    }
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: none;
+        border-radius: 5px;
+    }
+    .login-form button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="registration.html">Register</a>
+        <a href="login.html">Login</a>
+        <a href="users.html">Users</a>
+    </nav>
+</header>
+
+<h1>Library Management System - Login</h1>
+
+<form class="login-form">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br>
+    <button id="login-button">Login</button>
+</form>
+
+<script>
+let name = document.getElementById("name");
+let password = document.getElementById("password");
+let button = document.getElementById("login-button");
+button.addEventListener('click', function(event) {
+    event.preventDefault();
+    let users = localStorage.getItem("users");
+    if (users) {
+        let userList = JSON.parse(users);
+        let user = userList.find(user => user.name == name.value && user.password == password.value);
+        if (user) {
+            localStorage.setItem('loggedIn', true);
+            window.location.href = "index.html"; 
+        } else {
+            alert("Wrong login credentials");
+        }
+    } else {
+        alert("No user found");
+    }
+});
+</script>
+</body>
+</html>
