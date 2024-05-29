@@ -3,65 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management System - Book</title>
-    <style>
-        body{
-            background-image: url(library.jpg);
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        header {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
-        text-align: center;
-    }
-    nav a {
-        color: white;
-        margin: 0 15px;
-        text-decoration: none;
-    }
-    table {
-        border-collapse: collapse;
-        width: 50%;
-        margin: 20px auto;
-        background-color: #fff; 
-        border-radius: 10px;
-    }
-    th, td {
-        border: 1px solid #ddd; 
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #4CAF50; 
-        color: white;
-    }
-    form {
-        margin-bottom: 10px;
-        background-color: rgba(255, 255, 255, 0.7); 
-        padding: 20px;
-        border-radius: 10px;
-        width: 50%;
-        margin: 20px auto;
-    }
-    .hidden {
-        display: none;
-    }
-    </style>
-</head>
-<body>
-  <header>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="login.html">login</a>
-        <a href="users.html">users</a>
-        <a href="registration.html">Register</a>
-    </nav>
-    <div class="book">
-        <img src="">
-        <p></p>
-        <p></p>
-        <button id="btn">borrowBook</button>
-  </header>  
-</body>
+    <title>Library Management System - Book Details</title>
+    <body>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="registration.html" id="registerLink">Register</a>
+            <a href="login.html" id="loginLink">Login</a>
+            <a href="users.html" id="usersLink">Users</a>
+            <a href="bookmanagement.html" id="bookManagementLink" class="hidden">Book Management</a>
+            <a href="#" id="logoutLink" class="hidden">Logout</a>
+        </nav>
+        <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    background-image: url('library.jpg');
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.bookList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.book {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.book img {
+    width: 100px;
+    height: 150px;
+}
+
+.book p {
+    margin: 5px 0;
+}
+
+.book .title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.book .description {
+    font-style: italic;
+}
+
+form, .admin-form {
+    background-color: #4CAF50;
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    color: white;
+}
+
+form input, form select, form button, form textarea,
+.admin-form input, .admin-form select, .admin-form button, .admin-form textarea {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+
+#searchResults {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.search-result {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.search-result img {
+    width: 100px;
+    height: 150px;
+}
+
+.search-result p {
+    margin: 5px 0;
+}
+
+.search-result .title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+
+#usersTable {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+#usersTable th, #usersTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#usersTable th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#usersTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#usersTable tr:hover {
+    background-color: #ddd;
+}
+           </style>
+       </header>
+       
+       <div class="bookDetails">
+           <img id="bookImage" alt="">
+           <h2 id="A Brief History of Time"></h2>
+           <p id="A Brief History of Time: From the Big Bang to Black Holes is a book on theoretical cosmology by English physicist Stephen Hawking. It was first published in 1988. Hawking wrote the book for readers who had no prior knowledge of physics."></p>
+           <p id="12"></p>
+           <button id="borrowButton">Borrow</button>
+           <button id="returnButton" class="hidden">Return</button>
+       </div>
+       
+       <script>
+           const urlParams = new URLSearchParams(window.location.search);
+           const bookTitle = urlParams.get('title');
+           const books = JSON.parse(localStorage.getItem('books')) || [];
+           const book = books.find(book => book.title === bookTitle);
+           const users = JSON.parse(localStorage.getItem('users')) || [];
+           const loggedInUser = localStorage.getItem('loggedInUser');
+       
+           document.addEventListener('DOMContentLoaded', function() {
+               if (!book) {
+                   alert('Book not found');
+                   window.location.href = 'index.html';
+               } else {
+                   displayBookDetails();
+               }
+       
+               const loggedIn = localStorage.getItem('loggedIn');
+               if (loggedIn) {
+                   document.getElementById('logoutLink').classList.remove('hidden');
+                   document.getElementById('registerLink').classList.add('hidden');
+                   document.getElementById('loginLink').classList.add('hidden');
+               }
+           });
+       
+           document.getElementById('logoutLink').addEventListener('click', function() {
+               localStorage.removeItem('loggedIn');
+               localStorage.removeItem('loggedInUser');
+               window.location.href = 'login.html';
+           });
+       
+           document.getElementById('borrowButton').addEventListener('click', function() {
+               borrowBook(book.title);
+           });
+       
+           document.getElementById('returnButton').addEventListener('click', function() {
+               returnBook(book.title);
+           });
+       
+           function displayBookDetails() {
+               document.getElementById('bookImage').src = book.image;
+               document.getElementById('bookTitle').innerText = book.title;
+               document.getElementById('bookDescription').innerText = book.description;
+               document.getElementById('bookQuantity').innerText = `Available: ${book.quantity}`;
+               const user = users.find(user => user.name === loggedInUser);
+               const borrowedBook = user.borrowedBooks.find(b => b.title === book.title);
+               if (borrowedBook) {
+                   document.getElementById('returnButton').classList.remove('hidden');
+               } else {
+                   document.getElementById('borrowButton').classList.remove('hidden');
+               }
+           }
+       
+           function borrowBook(title) {
+               if (book.quantity > 0) {
+                   book.quantity -= 1;
+                   const user = users.find(user => user.name === loggedInUser);
+                   user.borrowedBooks.push({ title, borrowDate: new Date() });
+                   localStorage.setItem('books', JSON.stringify(books));
+                   localStorage.setItem('users', JSON.stringify(users));
+                   displayBookDetails();
+               } else {
+                   alert('Book not available.');
+               }
+           }
+       
+           function returnBook(title) {
+               const user = users.find(user => user.name === loggedInUser);
+               const borrowedBook = user.borrowedBooks.find(b => b.title === title);
+               const borrowDate = new Date(borrowedBook.borrowDate);
+               const currentDate = new Date();
+               const diffDays = Math.ceil((currentDate - borrowDate) / (1000 * 60 * 60 * 24));
+       
+               if (diffDays > 7) {
+                   const penaltyDays = diffDays - 7;
+                   alert(`Book returned late. Penalty days: ${penaltyDays}`);
+               }
+       
+               book.quantity += 1;
+               user.borrowedBooks = user.borrowedBooks.filter(b => b.title !== title);
+               localStorage.setItem('books', JSON.stringify(books));
+               localStorage.setItem('users', JSON.stringify(users));
+               displayBookDetails();
+           }
+       </script>
+    </body>
 </html>

@@ -1,140 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Library Management System - Users</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #e0e0e0; 
-        background-image: url(library.jpg);
-    }
-    header {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
-        text-align: center;
-    }
-    nav a {
-        color: white;
-        margin: 0 15px;
-        text-decoration: none;
-    }
-    table {
-        border-collapse: collapse;
-        width: 50%;
-        margin: 20px auto;
-        background-color: #fff; 
-        border-radius: 10px;
-    }
-    th, td {
-        border: 1px solid #ddd; 
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #4CAF50; 
-        color: white;
-    }
-    form {
-        margin-bottom: 10px;
-        background-color: rgba(255, 255, 255, 0.7); 
-        padding: 20px;
-        border-radius: 10px;
-        width: 50%;
-        margin: 20px auto;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System - Users</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<header>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="registration.html">Register</a>
-        <a href="login.html">Login</a>
-        <a href="users.html">Users</a>
-        <a href="#" id="logoutLink">Logout</a>
-    </nav>
-</header>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="registration.html" id="registerLink">Register</a>
+            <a href="login.html" id="loginLink">Login</a>
+            <a href="users.html">Users</a>
+            <a href="books.html">book</a>
+            <a href="borrow.html">borrow</a>
+            <a href="#" id="logoutLink" class="hidden">Logout</a>
+        </nav>
+        <style>
+           body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    background-image: url('library.jpg');
+}
 
-<h1>Library Management System - Users</h1>
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
 
-<form id="userForm">
-    <label for="userName">User Name:</label>
-    <input type="text" id="userName" required><br>
-    <label for="userRole">Role:</label>
-    <select id="userRole" required>
-        <option value="student">Student</option>
-        <option value="admin">Admin</option>
-    </select><br>
-    <button type="submit">Add User</button>
-</form>
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+}
 
-<table id="userTable">
-    <thead>
-        <tr>
-            <th>User Name</th>
-            <th>Role</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="userList"></tbody>
-</table>
+.hidden {
+    display: none;
+}
 
-<script>
-    let users = [];
+.bookList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-    function addUser(event) {
-        event.preventDefault();
-        const userName = document.getElementById('userName').value;
-        const userRole = document.getElementById('userRole').value;
+.book {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
 
-        const existingUser = users.find(user => user.name === userName);
-        if (existingUser) {
-            alert("User already exists.");
-        } else {
-            users.push({ name: userName, role: userRole });
-        }
+.book img {
+    width: 100px;
+    height: 150px;
+}
 
-        displayUsers();
-        document.getElementById('userForm').reset();
-    }
+.book p {
+    margin: 5px 0;
+}
 
-    function deleteUser(userName) {
-        users = users.filter(user => user.name !== userName);
-        displayUsers();
-    }
+.book .title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
 
-    function displayUsers() {
-        const userList = document.getElementById('userList');
-        userList.innerHTML = '';
+.book .description {
+    font-style: italic;
+}
+
+form, .admin-form {
+    background-color: #4CAF50;
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    color: white;
+}
+
+form input, form select, form button, form textarea,
+.admin-form input, .admin-form select, .admin-form button, .admin-form textarea {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+
+#searchResults {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.search-result {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.search-result img {
+    width: 100px;
+    height: 150px;
+}
+
+.search-result p {
+    margin: 5px 0;
+}
+
+.search-result .title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+
+#usersTable {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+#usersTable th, #usersTable td {
+    border: 1px solid #110e0e;
+    padding: 8px;
+    text-align: left;
+}
+
+#usersTable th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#usersTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+
+}
+#usersTable tr:nth-child(odd){
+    background-color: brown;
+}
+
+#usersTable tr:hover {
+    background-color: #ddd;
+}
+        </style>
+    </header>
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <h1>Registered Users</h1>
+    <div id="usersList"></div>
+
+    <script>
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (loggedInUser) {
+                document.getElementById('logoutLink').classList.remove('hidden');
+                document.getElementById('registerLink').classList.add('hidden');
+                document.getElementById('loginLink').classList.add('hidden');
+            } else {
+                alert('Please log in to view the users.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            displayUsers();
+        });
+
+        document.getElementById('logoutLink').addEventListener('click', function () {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = 'login.html';
+        });
+        function displayUsers() {
+        const usersTableBody = document.querySelector('#usersTable tbody');
+        usersTableBody.innerHTML = '';
         users.forEach(user => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+            const userRow = document.createElement('tr');
+            userRow.innerHTML = `
+                <td>${user.id}</td>
                 <td>${user.name}</td>
+                <td>${user.email}</td>
                 <td>${user.role}</td>
-                <td>
-                    <button onclick="deleteUser('${user.name}')">Delete</button>
-                </td>
             `;
-            userList.appendChild(row);
+            usersTableBody.appendChild(userRow);
         });
     }
 
-    document.getElementById('userForm').addEventListener('submit', addUser);
-    displayUsers();
-
-    
-    document.getElementById('logoutLink').addEventListener('click', function() {
-        localStorage.removeItem('loggedIn');
-        window.location.href = 'login.html';
-    });
-
-    
-    if (!localStorage.getItem('loggedIn')) {
-        window.location.href = 'login.html';
-    }
-</script>
+    </script>
 </body>
+
 </html>

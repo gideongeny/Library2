@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0e0e0;
+    background-image: url('library.jpg');
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.bookList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.book {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.book img {
+    width: 100px;
+    height: 150px;
+}
+
+.book p {
+    margin: 5px 0;
+}
+
+.book .title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.book .description {
+    font-style: italic;
+}
+
+form {
+    background-color: #4CAF50;
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    color: white;
+}
+
+form input, form select, form button {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+#usersList p {
+    font-weight: bold;
+    color: green;
+    font-style: italic;
+}

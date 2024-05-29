@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management System</title>
+    <title>Library Management System - Book Management</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="registration.html" id="registerLink">Register</a>
+        <a href="login.html" id="loginLink">Login</a>
+        <a href="users.html" id="usersLink">Users</a>
+        <a href="bookmanagement.html" id="bookManagementLink" class="hidden">Book Management</a>
+        <a href="#" id="logoutLink" class="hidden">Logout</a>
+    </nav>
     <style>
-        body {
+body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     background-image: url('library.jpg');
@@ -140,42 +148,69 @@ form input, form select, form button, form textarea,
 #usersTable tr:hover {
     background-color: #ddd;
 }
+
     </style>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="registration.html" id="registerLink">Register</a>
-        <a href="login.html" id="loginLink">Login</a>
-        <a href="users.html" id="usersLink">Users</a>
-        <a href="bookmanagement.html" id="bookmanagementLink">Book Management</a>
-        <a href="#" id="logoutLink" class="hidden">Logout</a>
-    </nav>
 </header>
 
-<h1>Welcome to the Library Management System</h1>
-<div id="loggedInStatus" class="hidden"></div>
+<h1>Book Management</h1>
+
+<form id="bookForm" class="admin-form">
+    <input type="hidden" id="bookId">
+    <label for="title">Title:</label>
+    <input type="text" id="title" required>
+    <label for="image">Image URL:</label>
+    <input type="text" id="image" required>
+    <label for="description">Description:</label>
+    <textarea id="description" required></textarea>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" required>
+    <button type="submit">Save</button>
+</form>
+
 <div id="bookList" class="bookList"></div>
 
 <script>
-    const books = JSON.parse(localStorage.getItem('books')) || [];
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    let books = JSON.parse(localStorage.getItem('books')) || [];
+    let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
     document.addEventListener('DOMContentLoaded', function() {
-        if (loggedInUser) {
+        if (loggedInUser && loggedInUser.role === 'admin') {
             document.getElementById('logoutLink').classList.remove('hidden');
-            document.getElementById('loggedInStatus').classList.remove('hidden');
-            document.getElementById('loggedInStatus').textContent = `Logged in as: ${loggedInUser.name}`;
             document.getElementById('registerLink').classList.add('hidden');
             document.getElementById('loginLink').classList.add('hidden');
-        
-                document.getElementById('bookManagementLink').classList.remove('hidden');
-            
+            document.getElementById('bookManagementLink').classList.remove('hidden');
+        } else {
+            alert('Only admins can access this page.');
+            window.location.href = 'index.html';
+            return;
         }
+
         displayBooks();
     });
 
     document.getElementById('logoutLink').addEventListener('click', function() {
         localStorage.removeItem('loggedInUser');
         window.location.href = 'login.html';
+    });
+
+    document.getElementById('bookForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const bookId = document.getElementById('bookId').value;
+        const title = document.getElementById('title').value;
+        const image = document.getElementById('image').value;
+        const description = document.getElementById('description').value;
+        const quantity = document.getElementById('quantity').value;
+
+        if (bookId) {
+            const bookIndex = books.findIndex(book => book.title === bookId);
+            books[bookIndex] = { title, image, description, quantity: parseInt(quantity) };
+        } else {
+            books.push({ title, image, description, quantity: parseInt(quantity) });
+        }
+
+        localStorage.setItem('books', JSON.stringify(books));
+        displayBooks();
+        document.getElementById('bookForm').reset();
     });
 
     function displayBooks() {
@@ -188,36 +223,28 @@ form input, form select, form button, form textarea,
                 <img src="${book.image}" alt="${book.title}">
                 <p class="title">${book.title}</p>
                 <p class="description">${book.description}</p>
-                <p style="color:${book.quantity>2?"green":"red"}">Available: ${book.quantity}</p>
-                <button onclick="borrowBook('${book.title}')">Borrow</button>
-                <button onclick="returnBook('${book.title}')">return</button>
+                <p>Available: ${book.quantity}</p>
+                <button onclick="editBook('${book.title}')">Edit</button>
+                <button onclick="deleteBook('${book.title}')">Delete</button>
             `;
             bookList.appendChild(bookDiv);
         });
     }
 
-    function borrowBook(title) {
-        const bookIndex = books.findIndex(book => book.title === title);
-        if (books[bookIndex].quantity > 2) {
-            books[bookIndex].quantity -= 1;
-            localStorage.setItem('books', JSON.stringify(books));
-            displayBooks();
-        } else {
-            alert('Maximum book reached.');
-        }
-    
+    function editBook(title) {
+        const book = books.find(book => book.title === title);
+        document.getElementById('bookId').value = book.title;
+        document.getElementById('title').value = book.title;
+        document.getElementById('image').value = book.image;
+        document.getElementById('description').value = book.description;
+        document.getElementById('quantity').value = book.quantity;
     }
-    function returnBook(title) {
-        const bookIndex = books.findIndex(book => book.title === title);
-        if (books[bookIndex].quantity > 1) {
-            books[bookIndex].quantity += 1;
-            localStorage.setItem('books', JSON.stringify(books));
-            displayBooks();
-        } else {
-            alert('All books returned.');
-        }
+
+    function deleteBook(title) {
+        books = books.filter(book => book.title !== title);
+        localStorage.setItem('books', JSON.stringify(books));
+        displayBooks();
     }
-    displayBooks()
 </script>
 </body>
 </html>
