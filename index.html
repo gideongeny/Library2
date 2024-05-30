@@ -5,148 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Management System</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            background-image: url('library.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .bookList, #searchResults {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .book, .search-result {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 300px;
+        }
+
+        .book img, .search-result img {
+            width: 100px;
+            height: 150px;
+        }
+
+        .book p, .search-result p {
+            margin: 5px 0;
+        }
+
+        .book .title, .search-result .title {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .book .description, .search-result .description {
+            font-style: italic;
+        }
+
+        form, .admin-form {
+            background-color: #4CAF50;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 300px;
+            margin: auto;
+            text-align: center;
+            color: white;
+        }
+
+        form input, form select, form button, form textarea,
+        .admin-form input, .admin-form select, .admin-form button, .admin-form textarea {
+            display: block;
+            width: calc(100% - 20px);
+            margin: 10px auto;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        #usersTable {
+            width: 90%;
+            max-width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        #usersTable th, #usersTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #usersTable th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #usersTable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #usersTable tr:hover {
+            background-color: #ddd;
+        }
+
+        @media (min-width: 600px) {
+            .book, .search-result {
+                width: calc(50% - 40px);
+            }
+
+            form, .admin-form {
+                width: 70%;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .book, .search-result {
+                width: calc(33.333% - 40px);
+            }
+
+            form, .admin-form {
+                width: 50%;
+            }
+
+            #usersTable {
+                width: 70%;
+            }
+        }
+    </style>
 </head>
 <body>
 <header>
-    <style>
-        body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    background-image: url('library.jpg');
-}
-
-header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    text-align: center;
-}
-
-nav a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-}
-
-.hidden {
-    display: none;
-}
-
-.bookList {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.book {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 10px;
-    margin: 10px;
-    border-radius: 10px;
-    text-align: center;
-    width: 300px;
-}
-
-.book img {
-    width: 100px;
-    height: 150px;
-}
-
-.book p {
-    margin: 5px 0;
-}
-
-.book .title {
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-.book .description {
-    font-style: italic;
-}
-
-form, .admin-form {
-    background-color: #4CAF50;
-    padding: 20px;
-    border-radius: 15px;
-    width: 300px;
-    margin: auto;
-    text-align: center;
-    color: white;
-}
-
-form input, form select, form button, form textarea,
-.admin-form input, .admin-form select, .admin-form button, .admin-form textarea {
-    display: block;
-    width: calc(100% - 20px);
-    margin: 10px auto;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-}
-
-
-#searchResults {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.search-result {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 10px;
-    margin: 10px;
-    border-radius: 10px;
-    text-align: center;
-    width: 300px;
-}
-
-.search-result img {
-    width: 100px;
-    height: 150px;
-}
-
-.search-result p {
-    margin: 5px 0;
-}
-
-.search-result .title {
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-
-#usersTable {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-}
-
-#usersTable th, #usersTable td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-#usersTable th {
-    background-color: #4CAF50;
-    color: white;
-}
-
-#usersTable tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-#usersTable tr:hover {
-    background-color: #ddd;
-}
-    </style>
     <nav>
         <a href="index.html">Home</a>
         <a href="registration.html" id="registerLink">Register</a>
         <a href="login.html" id="loginLink">Login</a>
         <a href="users.html" id="usersLink">Users</a>
-        <a href="bookmanagement.html" id="bookmanagementLink">Book Management</a>
+        <a href="bookmanagement.html" id="bookManagementLink">Book Management</a>
         <a href="#" id="logoutLink" class="hidden">Logout</a>
     </nav>
 </header>
@@ -166,9 +168,7 @@ form input, form select, form button, form textarea,
             document.getElementById('loggedInStatus').textContent = `Logged in as: ${loggedInUser.name}`;
             document.getElementById('registerLink').classList.add('hidden');
             document.getElementById('loginLink').classList.add('hidden');
-        
-                document.getElementById('bookManagementLink').classList.remove('hidden');
-            
+            document.getElementById('bookManagementLink').classList.remove('hidden');
         }
         displayBooks();
     });
@@ -188,9 +188,9 @@ form input, form select, form button, form textarea,
                 <img src="${book.image}" alt="${book.title}">
                 <p class="title">${book.title}</p>
                 <p class="description">${book.description}</p>
-                <p style="color:${book.quantity>2?"green":"red"}">Available: ${book.quantity}</p>
+                <p style="color:${book.quantity>2 ? 'green' : 'red'}">Available: ${book.quantity}</p>
                 <button onclick="borrowBook('${book.title}')">Borrow</button>
-                <button onclick="returnBook('${book.title}')">return</button>
+                <button onclick="returnBook('${book.title}')">Return</button>
             `;
             bookList.appendChild(bookDiv);
         });
@@ -205,8 +205,8 @@ form input, form select, form button, form textarea,
         } else {
             alert('Maximum book reached.');
         }
-    
     }
+
     function returnBook(title) {
         const bookIndex = books.findIndex(book => book.title === title);
         if (books[bookIndex].quantity > 1) {
@@ -217,7 +217,7 @@ form input, form select, form button, form textarea,
             alert('All books returned.');
         }
     }
-    displayBooks()
+
+    displayBooks();
 </script>
 </body>
-</html>
